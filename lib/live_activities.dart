@@ -8,7 +8,7 @@ class LiveActivities {
   /// Map is limited to String keys and values for now.
   Future<Activity?> createActivity(Map<String, String> data) async {
     try {
-      var result = LiveActivitiesPlatform.instance.createActivity(data);
+      var result = await LiveActivitiesPlatform.instance.createActivity(data);
       return Activity.fromJson(json.decode(result));
     } catch(e) {
       print(e);
