@@ -16,7 +16,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin {
         guard let args = call.arguments  as? [String: Any] else {
           return
         }
-        if let data = args["data"] as? Dictionary<String, String> {
+        if let data = args["data"] as? Dictionary<String, Any> {
           createActivity(data: data, result: result)
         } else {
           result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'data' is valid", details: nil))
@@ -51,7 +51,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin {
   }
   
   @available(iOS 16.1, *)
-  func createActivity(data: Dictionary<String, String>, result: @escaping FlutterResult) {
+  func createActivity(data: Dictionary<String, Any>, result: @escaping FlutterResult) {
     let center = UNUserNotificationCenter.current()
     center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
       
@@ -61,7 +61,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin {
     }
     
     let liveDeliveryAttributes = LiveActivitiesAppAttributes()
-    let initialContentState = LiveActivitiesAppAttributes.LiveDeliveryData(data: data)
+      let initialContentState = LiveActivitiesAppAttributes.LiveDeliveryData(mainTitle: (data["mainTitle"] ?? "") as! String, progress: (data["progress"]  ?? 0.0) as! Double, title: (data["title"] ?? "") as! String, subtitle: (data["subtitle"]  ?? "") as! String, type: (data["type"]  ?? "") as! String, ongoingOrders: (data["ongoingOrders"] ?? 0) as! Int)
     
     do {
       let deliveryActivity = try Activity<LiveActivitiesAppAttributes>.request(
@@ -83,11 +83,11 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin {
   }
   
   @available(iOS 16.1, *)
-  func updateActivity(activityId: String, data: Dictionary<String, String>, result: @escaping FlutterResult) {
+  func updateActivity(activityId: String, data: Dictionary<String, Any>, result: @escaping FlutterResult) {
     Task {
       for activity in Activity<LiveActivitiesAppAttributes>.activities {
         if (activityId == activity.id) {
-          let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(data: data)
+              let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(mainTitle: (data["mainTitle"] ?? "") as! String, progress: (data["progress"]  ?? 0.0) as! Double, title: (data["title"] ?? "") as! String, subtitle: (data["subtitle"]  ?? "") as! String, type: (data["type"]  ?? "") as! String, ongoingOrders: (data["ongoingOrders"] ?? 0) as! Int)
           await activity.update(using: updatedStatus)
           break;
         }
@@ -111,8 +111,12 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin {
     public typealias LiveDeliveryData = ContentState
     
     public struct ContentState: Codable, Hashable {
-      // TODO: Need to send an Any object
-      var data: Dictionary<String, String>
+        var mainTitle: String
+        var progress: Double
+        var title: String
+        var subtitle: String
+        var type: String
+        var ongoingOrders: Int
     }
     
     var id = UUID()

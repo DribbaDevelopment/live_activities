@@ -23,7 +23,7 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> createActivity(Map<String, String> data) {
+  Future<String?> createActivity(Map<String, dynamic> data) {
     throw UnimplementedError('createActivity() has not been implemented.');
   }
 

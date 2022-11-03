@@ -15,7 +15,7 @@ class PizzaLiveActivityModel {
     required this.deliverDate,
   });
 
-  Map<String, String> toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'name': name,
       'description': description,

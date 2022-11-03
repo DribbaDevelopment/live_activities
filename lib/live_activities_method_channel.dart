@@ -10,7 +10,7 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
   final methodChannel = const MethodChannel('live_activities');
 
   @override
-  Future<String?> createActivity(Map<String, String> data) async {
+  Future<String?> createActivity(Map<String, dynamic> data) async {
     return methodChannel.invokeMethod<String>('createActivity', {
       'data': data,
     });
