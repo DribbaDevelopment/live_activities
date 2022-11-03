@@ -46,8 +46,11 @@ class _MyAppState extends State<MyApp> {
                       ),
                     );
 
-                    _latestActivityId = await _liveActivitiesPlugin
+                    var activity = await _liveActivitiesPlugin
                         .createActivity(activityModel.toMap());
+                    if (activity != null) {
+                      _latestActivityId = activity.activityId;
+                    }
                     setState(() {});
                   },
                   child: const Text('Create activity'),

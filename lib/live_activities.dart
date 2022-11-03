@@ -5,8 +5,14 @@ class LiveActivities {
   /// When the activity is created, an activity id is returned.
   /// Data is a map of key/value pairs that will be transmitted to your iOS extension widget.
   /// Map is limited to String keys and values for now.
-  Future<String?> createActivity(Map<String, String> data) async {
-    return LiveActivitiesPlatform.instance.createActivity(data);
+  Future<Activity?> createActivity(Map<String, String> data) async {
+    try {
+      var result = LiveActivitiesPlatform.instance.createActivity(data);
+      return Activity.fromJson(json.decode(result));
+    } catch(e) {
+      print(e);
+    }
+    return null;
   }
 
   /// Update an iOS 16.1+ live activity.
@@ -21,5 +27,17 @@ class LiveActivities {
   /// You can get an activity id by calling [createActivity].
   Future endActivity(String activityId) {
     return LiveActivitiesPlatform.instance.endActivity(activityId);
+  }
+}
+
+class Activity {
+  String? activityId;
+  String? pushToken;
+
+  Activity({this.activityId, this.pushToken});
+
+  Activity.fromJson(Map<String, dynamic> json) {
+    activityId = json['activity_id'];
+    pushToken = json['pushToken'];
   }
 }

@@ -67,8 +67,16 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin {
       let deliveryActivity = try Activity<LiveActivitiesAppAttributes>.request(
         attributes: liveDeliveryAttributes,
         contentState: initialContentState,
-        pushType: nil)
-      result(deliveryActivity.id)
+        pushType: PushType.token)
+        
+        Task {
+              for await data in deliveryActivity.pushTokenUpdates {
+                 let myToken = data.map {String(format: "%02x", $0)}.joined()
+                  result("{\"activity_id\": \"\(deliveryActivity.id)\", \"pushToken\": \"\(myToken)\"}")
+              }
+           }
+        
+        
     } catch (let error) {
       result(FlutterError(code: "LIVE_ACTIVITY_ERROR", message: "can't launch live activity", details: error.localizedDescription))
     }
