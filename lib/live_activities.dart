@@ -9,7 +9,7 @@ class LiveActivities {
   Future<Activity?> createActivity(Map<String, String> data) async {
     try {
       var result = await LiveActivitiesPlatform.instance.createActivity(data);
-      return Activity.fromJson(json.decode(result));
+      return Activity.fromJson(json.decode(result!));
     } catch(e) {
       print(e);
     }
