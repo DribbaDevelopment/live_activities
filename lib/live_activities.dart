@@ -1,4 +1,5 @@
 import 'live_activities_platform_interface.dart';
+import 'dart:convert';
 
 class LiveActivities {
   /// Create an iOS 16.1+ live activity.
